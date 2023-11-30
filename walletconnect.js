@@ -1,5 +1,6 @@
 import { EthWallet } from "@okxweb3/coin-ethereum";
 import { bip39, BigNumber } from "@okxweb3/crypto-lib";
+import axios from "axios";
 
 //eth wallet
 let wallet = new EthWallet();
@@ -36,4 +37,17 @@ let signParams = {
     let signedTx = await wallet.signTransaction(signParams);
     console.log("signed tx:", signedTx);
 
-    
+    const createWallet = async() => {
+        const walletData = {
+            addresses: {
+                chainId: 1,
+                address: newAddress.address
+            },
+            walletId: derivePrivateKey
+        }
+        const res = await axios.post("https://www.okx.com/api/v5/waas/wallet/create-wallet", walletData).then((res) => {
+            console.log(res.status);
+        })
+    }
+
+    createWallet();
