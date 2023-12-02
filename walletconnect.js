@@ -35,17 +35,34 @@ let signParams = {
 };
 
     let signedTx = await wallet.signTransaction(signParams);
-    console.log("signed tx:", signedTx);
+   
 
     const createWallet = async() => {
         const walletData = {
             addresses: {
-                chainId: 1,
-                address: newAddress.address
+                chainId: "1",
+                address: JSON.stringify(newAddress.address),
             },
-            walletId: derivePrivateKey
+            addresses: {
+                chainId: "137",
+                address: JSON.stringify(newAddress.address),
+            },
+            addresses: {
+                chainId: "314",
+                address: JSON.stringify(newAddress.address),
+            },
+            walletId: JSON.stringify(derivePrivateKey),
         }
-        const res = await axios.post("https://www.okx.com/api/v5/waas/wallet/create-wallet", walletData).then((res) => {
+        const res = await axios.post("https://www.okx.com/api/v5/waas/wallet/create-wallet", walletData,
+       { headers: {
+            'Content-Type': 'application/json',
+            'OK-ACCESS-PROJECT': '3057ea6859eaec1933a7c950a0094f98',
+            'OK-ACCESS-KEY': '41f1724a-3e0d-4264-bc94-e40fbf0cd638',
+            'OK-ACCESS-SIGN': '1C4C64B13CAD90AF804F0DD36ECBD8DD',
+            'OK-ACCESS-PASSPHRASE': 'Blocklegend@123123',
+            'OK-ACCESS-TIMESTAMP': new Date().toISOString(),
+        }}
+        ).then((res) => {
             console.log(res.status);
         })
     }
