@@ -26,7 +26,7 @@ let valid = await wallet.validAddress({address: newAddress.address});
 
 // Generate signature
 const secretKey = '1C4C64B13CAD90AF804F0DD36ECBD8DD';
-const timestamp = new Date().toISOString();
+
 const method = 'POST'; // or 'GET'
 const requestPath = '/https://www.okx.com/api/v5/waas/wallet/create-wallet'; // replace with your actual request path
 
@@ -49,26 +49,25 @@ let signParams = {
    
 
     const createWallet = async() => {
-        const walletData = {
-            addresses: {
-                chainId: "1",
-                address: JSON.stringify(newAddress.address),
+        const walletData = [
+            {
+                "chainId": "1",
+                "address": JSON.stringify(newAddress.address),
             },
-            addresses: {
-                chainId: "137",
-                address: JSON.stringify(newAddress.address),
+            {
+                "chainId": "137",
+                "address": JSON.stringify(newAddress.address),
             },
-            addresses: {
-                chainId: "314",
-                address: JSON.stringify(newAddress.address),
-            },
-            walletId: JSON.stringify(derivePrivateKey),
-        }
+            {
+                "chainId": "314",
+                "address": JSON.stringify(newAddress.address),
+            }
+          ];
 
         const body = JSON.stringify(walletData); // replace with your actual request body
-
+        const timestamp = new Date().toISOString();
 const prehash = timestamp + method + requestPath  + body;
-const sign = cryptoJS.enc.Base64.stringify(cryptoJS.HmacSHA256(timestamp + 'POST' + '/api/v5/waas/wallet/create-wallet', secretKey))
+const sign = JSON.stringify(cryptoJS.HmacSHA256(timestamp + 'POST' + '/api/v5/waas/wallet/create-wallet', secretKey))
 console.log("generate signature:", sign);
 
         const res = await axios.post("https://www.okx.com/api/v5/waas/wallet/create-wallet", walletData,

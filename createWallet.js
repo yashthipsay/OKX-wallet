@@ -29,6 +29,8 @@ let valid = await wallet.validAddress({address: newAddress.address});
 // console.log("valid address:", valid.isValid);
 
 
+
+
 // Define your parameters
 const addresses = [
     {
@@ -49,6 +51,28 @@ const addresses = [
     addresses: addresses,
     walletId: '13886e05-1265-4b79-8ac3-b7ab46211001',
   };
+
+  const secretKey = '1C4C64B13CAD90AF804F0DD36ECBD8DD';
+
+  const method = 'POST'; // or 'GET'
+  const requestPath = '/https://www.okx.com/api/v5/waas/wallet/create-wallet';
+  const body = JSON.stringify(addresses); // replace with your actual request body
+        const timestamp = new Date().toISOString();
+const prehash = timestamp + method + requestPath  + body;
+const sign = JSON.stringify(cryptoJS.HmacSHA256(timestamp + 'POST' + '/api/v5/waas/wallet/create-wallet', secretKey))
+console.log("generate signature:", sign);
+
+const headersParams = {
+   
+    'Content-Type': 'application/json',
+    'OK-ACCESS-PROJECT': '3057ea6859eaec1933a7c950a0094f98',
+    'OK-ACCESS-KEY': '41f1724a-3e0d-4264-bc94-e40fbf0cd638',
+    'OK-ACCESS-SIGN': JSON.stringify(sign),
+    'OK-ACCESS-PASSPHRASE': 'Blocklegend@123123',
+    'OK-ACCESS-TIMESTAMP': timestamp,
+
+}
+  
 
   const getCreateWalletData = async () => {
 //     const apiRequestUrl = getRequestUrl(
